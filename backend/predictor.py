@@ -87,11 +87,16 @@ class APSPredictor:
                 )
 
     def _extract_raw_feature_names(self) -> list[str]:
-        """Recover original input columns from the FunctionTransformer closure.
+        """Recover the original input columns from the fitted preprocessing step.
 
-        The notebook's make_engineer() returns a nested engineer_features() function.
-        Cloudpickle preserves its closure, including original_feature_columns.
+        The notebook's feature-engineering function captures the raw schema in a
+        closure. That closure is useful when available, but is an implementation
+        detail of cloudpickle and can deserialize differently across Python or
+        scikit-learn versions. ``feature_names_in_`` is persisted by the fitted
+        FunctionTransformer and is therefore the reliable fallback for deployed
+        artifacts.
         """
+        feature_step = None
         try:
             feature_step = self.preprocessor.named_steps["feature_engineering"]
             engineer_function = feature_step.func
@@ -103,9 +108,19 @@ class APSPredictor:
                 cells = engineer_function.__closure__ or ()
                 cell_values = dict(zip(freevars, (cell.cell_contents for cell in cells)))
                 raw_columns = cell_values.get("original_feature_columns")
-            return list(raw_columns) if raw_columns is not None else []
+            if raw_columns is not None:
+                return [str(column) for column in raw_columns]
         except Exception:
-            return []
+            # A cloudpickled nested function can have a closure that is not
+            # introspectable in another runtime. Try persisted fitted metadata.
+            pass
+
+        for fitted_object in (feature_step, self.preprocessor, self.pipeline):
+            raw_columns = getattr(fitted_object, "feature_names_in_", None)
+            if raw_columns is not None and len(raw_columns):
+                return [str(column) for column in raw_columns]
+
+        return []
 
     def model_info(self) -> dict[str, Any]:
         return {
