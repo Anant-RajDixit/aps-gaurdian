@@ -22,7 +22,7 @@ In a second terminal, start the dashboard:
 
 ## Deploy on Render
 
-`render.yaml` is a Render Blueprint located in this directory. In Render, create a **New Blueprint** and set the Blueprint path to `Truck_Health/render.yaml`. It creates two web services:
+`render.yaml` is a Render Blueprint at the repository root. In Render, create a **New Blueprint** and use `render.yaml` as the Blueprint path. It creates two web services:
 
 1. `truck-health-api`: the public FastAPI service, with `/health` as its health check.
 2. `truck-health-frontend`: the public Streamlit dashboard. It receives the API service's private host and port automatically through `API_HOSTPORT`.
