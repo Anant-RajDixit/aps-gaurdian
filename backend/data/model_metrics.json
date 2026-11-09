@@ -1,0 +1,31 @@
+{
+  "model_name": "Baseline XGBoost",
+  "evaluation_source": "official_holdout_evaluation",
+  "holdout_rows": 16000,
+  "holdout_positive_cases": 375,
+  "threshold": 0.01811,
+  "probabilities_calibrated": false,
+  "cost_function": "10 * false_positives + 500 * false_negatives",
+  "metrics": {
+    "pr_auc": 0.92752,
+    "roc_auc": 0.99477,
+    "precision": 0.52180,
+    "recall": 0.95733,
+    "f1_score": 0.67545,
+    "accuracy": 0.97844,
+    "true_positives": 359,
+    "false_positives": 329,
+    "true_negatives": 15296,
+    "false_negatives": 16,
+    "total_cost": 11290,
+    "inspection_rate": 0.043
+  },
+  "model_comparison": {
+    "baseline_lightgbm_oof_cost": 28060,
+    "baseline_xgboost_oof_cost": 26420,
+    "lightgbm_median_inference_seconds": 0.0147,
+    "xgboost_median_inference_seconds": 0.01928,
+    "inference_benchmark_note": "Preliminary model-only benchmark; the LightGBM and XGBoost model training scopes were not matched."
+  },
+  "calibration_note": "Sigmoid calibration was explored on the LightGBM candidate only. The selected XGBoost model uses uncalibrated scores."
+}

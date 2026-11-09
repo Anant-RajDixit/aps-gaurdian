@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: truck-health-api
+    runtime: python
+    rootDir: Truck_Health
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.1"
+
+  - type: web
+    name: truck-health-frontend
+    runtime: python
+    rootDir: Truck_Health
+    buildCommand: pip install -r frontend/requirements.txt
+    startCommand: streamlit run frontend/app.py --server.address 0.0.0.0 --server.port $PORT
+    healthCheckPath: /_stcore/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.1"
+      - key: API_HOSTPORT
+        fromService:
+          type: web
+          name: truck-health-api
+          property: hostport

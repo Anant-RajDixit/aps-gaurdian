@@ -1,0 +1,7 @@
+{
+    "model": "Baseline XGBoost",
+    "optimal_threshold": 0.01811,
+    "threshold_selection": "Minimum OOF cost",
+    "false_positive_cost": 10,
+    "false_negative_cost": 500
+}

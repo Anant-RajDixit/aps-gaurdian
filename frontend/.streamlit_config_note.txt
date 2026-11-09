@@ -1,0 +1,2 @@
+Optional Streamlit theme configuration can be placed in frontend/.streamlit/config.toml.
+The application uses a dark-blue/teal dashboard accent through inline CSS and does not require this file.

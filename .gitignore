@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.streamlit/secrets.toml
+.DS_Store
+.ipynb_checkpoints/
+
+# Local runtime output
+*.log
+
+# Large local data and exploratory artefacts (the deployable model stays tracked)
+aps_failure_*.csv
+aps_failure_description.txt
+feature_ablation_study.csv
+single_feature_leakage_screen.csv
+*.ipynb
